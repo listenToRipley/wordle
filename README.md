@@ -85,6 +85,8 @@ Distributed under the MIT license. See [`LICENSE`](../LICENSE) for more informat
 
 ## Notes
 
+*Paused work on Step 3*
+
 ### Testing
 
 Used [Alice in Wonderland text](gutenberg.org/cache/epub/11/pg11-images.html)
