@@ -11,7 +11,7 @@ for guess_num in range(1,7):
 # verify letter is valid amd in correct location
 correct_letters = { 
     letter for letter, correct in zip(guess, WORD) if letter == correct
-}
+} # ZIP: element-by-element comparisons between elements, in our case, the guess and the word.
 
 # correct letters, wrong location
 misplaced_letters = set(guess) & set(WORD) - correct_letters 
