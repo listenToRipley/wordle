@@ -10,8 +10,8 @@ correct_letters = { # verify letter is valid amd om correct location
     letter for letter, correct in zip(guess, WORD) if letter == correct
 }
 
-misplaced_letters = set(guess) & set(WORD) - correct_letters
-wrong_letters = set(guess) - set(WORD)
+misplaced_letters = set(guess) & set(WORD) - correct_letters # correct letters, wrong location
+wrong_letters = set(guess) - set(WORD) # letters not included in word.
 
 print("Correct letters: ",", ".join(sorted(correct_letters)))
 print("Misplaced letters: ",", ".join(sorted(misplaced_letters)))
