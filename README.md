@@ -65,6 +65,14 @@ python wyrdl.py
 
 Check out the `wordlist.txt` file for a list of the words that are available (in step 2 and later). Edit this file if you want to play with your own words.
 
+### Using Create WordList
+
+This application allows you to added elements from one document to another. 
+
+```console
+python create_wordlist.py wyrdl.py wordlist.txt
+```
+
 ## Author
 
 - **Geir Arne Hjelle**, E-mail: [geirarne@realpython.com](geirarne@realpython.com)
