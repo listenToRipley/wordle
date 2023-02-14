@@ -1,24 +1,40 @@
-WORD = "SNAKE"
+import pathlib
+import random
+from string import ascii_letters
+
+WORDLIST = pathlib.Path("wordlist.txt") #get word from txt doc.
+words = [
+    word.upper() # make sure the word provided is all upper.
+    for word in WORDLIST.read_text(encoding="utf-8").strip().split("\n") # create an array to go through
+    if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
+]
+
+word = random.choice(words)
+
+WORD= "SNAKE"
 
 for guess_num in range(1,7):
     guess = input(f"\nGuess a word : ").upper() # verify that the guess will match the all upper current word
-    if guess == WORD: # should keep guessing if the word was not correct
-        print(f"Correct! the word was {WORD}")
+    if guess == word: # should keep guessing if the word was not correct
+        print(f"Correct! the word was {word}")
         break #only exit if they guess correctly.
-    print("Wrong")
 
-#3 types of options for letters provided in guess
-# verify letter is valid amd in correct location
-correct_letters = { 
-    letter for letter, correct in zip(guess, WORD) if letter == correct
-} # ZIP: element-by-element comparisons between elements, in our case, the guess and the word.
+    #3 types of options for letters provided in guess
+    # verify letter is valid amd in correct location
+    correct_letters = { 
+        letter for letter, correct in zip(guess, word) if letter == correct
+    } # ZIP: element-by-element comparisons between elements, in our case, the guess and the word.
 
-# correct letters, wrong location
-misplaced_letters = set(guess) & set(WORD) - correct_letters 
+    # correct letters, wrong location
+    misplaced_letters = set(guess) & set(word) - correct_letters # remove the already accounted for letter
 
-# letters not included in word.
-wrong_letters = set(guess) - set(WORD) 
+    # set() and set() provide intersecting elements
 
-print("Correct letters: ",", ".join(sorted(correct_letters)))
-print("Misplaced letters: ",", ".join(sorted(misplaced_letters)))
-print("Wrong letters: ",", ".join(sorted(wrong_letters)))
+    # letters not included in word.
+    wrong_letters = set(guess) - set(word) 
+
+    print("Correct letters: ",", ".join(sorted(correct_letters)))
+    print("Misplaced letters: ",", ".join(sorted(misplaced_letters)))
+    print("Wrong letters: ",", ".join(sorted(wrong_letters)))
+else:
+    print(f"The word was {word}")

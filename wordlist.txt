@@ -1,0 +1,10 @@
+adder
+black
+snake
+quack
+snack
+shack
+smack
+sable
+label
+moist
