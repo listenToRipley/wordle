@@ -57,10 +57,10 @@ You can then install `rich` with `pip`:
 
 ## Run the Application
 
-Enter one of the `source_code_...` folders. You can then run the Wordle clone by running `wyrdl.py` as a script:
+Run script:
 
 ```console
-(venv) $ python wyrdl.py
+python wyrdl.py
 ```
 
 Check out the `wordlist.txt` file for a list of the words that are available (in step 2 and later). Edit this file if you want to play with your own words.
