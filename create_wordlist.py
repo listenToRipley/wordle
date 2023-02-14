@@ -9,7 +9,7 @@ words = sorted(
     {
         word.lower() #create an array of all lowercase words within a given path
         for word in in_path.read_text(encoding="utf-8").split()
-        if all(letter in ascii_letters for letter in word)
+        if len(word) == 5 and all(letter in ascii_letters for letter in word)
     },
     key=lambda word: (len(word), word),
 )

@@ -67,16 +67,40 @@ Check out the `wordlist.txt` file for a list of the words that are available (in
 
 ### Using Create WordList
 
-This application allows you to added elements from one document to another. 
+This application allows you to added elements from one document to another. Example:
 
 ```console
 python create_wordlist.py wyrdl.py wordlist.txt
 ```
 
+###
+
 ## Author
 
-- **Geir Arne Hjelle**, E-mail: [geirarne@realpython.com](geirarne@realpython.com)
+- **Geir Arne Hjelle**, E-mail: [geirarne@realpython.com](geirarne@realpython.com) with contributing notes on this repo from **Natalie Kendrick**, Email: [natalie.m.kendrick@gmail.com](natalie.m.kendrick@gmail.com)
 
 ## License
 
 Distributed under the MIT license. See [`LICENSE`](../LICENSE) for more information.
+
+## Notes
+
+### Testing
+
+Used [Alice in Wonderland text](gutenberg.org/cache/epub/11/pg11-images.html)
+
+### Other languages
+
+This application is currently set up to work only with the english language. You may need to add regular expression and special sequence matches if you wished to work with another language.
+
+With the [create_wordlist](./create_wordlist.py) you should replace  the following line
+
+```python
+   #original
+   if all(letter in ascii_letters for letter in word)
+   #replace with
+   if re.fullmatch(r"\w+", word):
+    #add regex to account for new language.
+```
+
+Also import `re`
