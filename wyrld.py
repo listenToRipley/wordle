@@ -7,12 +7,17 @@ for guess_num in range(1,7):
         break #only exit if they guess correctly.
     print("Wrong")
 
-correct_letters = { # verify letter is valid amd om correct location
+#3 types of options for letters provided in guess
+# verify letter is valid amd in correct location
+correct_letters = { 
     letter for letter, correct in zip(guess, WORD) if letter == correct
 }
 
-misplaced_letters = set(guess) & set(WORD) - correct_letters # correct letters, wrong location
-wrong_letters = set(guess) - set(WORD) # letters not included in word.
+# correct letters, wrong location
+misplaced_letters = set(guess) & set(WORD) - correct_letters 
+
+# letters not included in word.
+wrong_letters = set(guess) - set(WORD) 
 
 print("Correct letters: ",", ".join(sorted(correct_letters)))
 print("Misplaced letters: ",", ".join(sorted(misplaced_letters)))
