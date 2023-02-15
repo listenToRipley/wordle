@@ -60,7 +60,7 @@ You can then install `rich` with `pip`:
 Run script:
 
 ```console
-python wyrdl.py
+python wyrld.py
 ```
 
 Check out the `wordlist.txt` file for a list of the words that are available (in step 2 and later). Edit this file if you want to play with your own words.
