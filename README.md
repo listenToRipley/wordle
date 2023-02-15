@@ -73,8 +73,6 @@ This application allows you to added elements from one document to another. Exam
 python create_wordlist.py wyrdl.py wordlist.txt
 ```
 
-###
-
 ## Author
 
 - **Geir Arne Hjelle**, E-mail: [geirarne@realpython.com](geirarne@realpython.com) with contributing notes on this repo from **Natalie Kendrick**, Email: [natalie.m.kendrick@gmail.com](natalie.m.kendrick@gmail.com)
@@ -85,9 +83,13 @@ Distributed under the MIT license. See [`LICENSE`](../LICENSE) for more informat
 
 ## Notes
 
+*Stopped at step 4*
+
 ### Testing
 
 Used [Alice in Wonderland text](gutenberg.org/cache/epub/11/pg11-images.html)
+
+*Future state* include [Testing built in](https://realpython.com/python-doctest/)
 
 ### Other languages
 
