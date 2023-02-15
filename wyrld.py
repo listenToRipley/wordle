@@ -5,15 +5,14 @@ from string import ascii_letters
 def main():
     # find the current word.
     words_path = pathlib.Path(__file__).parent / "wordlist.txt"; #location of file where words are stored.
-    word = get_random_word(words_path); #param is the list of words you want to pick from
+    word = get_random_word(words_path.read_text(encoding="utf-8").split("\n")); #param is the list of words you want to pick from
 
-    # where are start guessing
+    # where are start guessing - main loop
     for guess_num in range(1,7):
         guess = input(f"\nGuess {guess_num}: ").upper(); # verify that the guess will match the all upper current word
 
         show_guess(guess, word);
         if guess == word: #validate if these are correct.
-            print(f"Correct! the word was {word}")
             break; #only exit if they guess correctly.
     
     # end game
@@ -48,3 +47,8 @@ def show_guess(guess, word): #
     print("Misplaced letters: ",", ".join(sorted(misplaced_letters)));
     print("Wrong letters: ",", ".join(sorted(wrong_letters)));
 
+def game_over(word):
+    print(f"The word was {word}");
+
+if __name__ == "__main__":
+    main(); # run main
