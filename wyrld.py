@@ -17,7 +17,7 @@ def main():
             bad_guess = True;
         
         if bad_guess:
-            print('Sorry, all guesses must be 5 letters long, please try again.')
+            print('Sorry, all guesses must be 5 letters long. Please try again.')
 
         else: 
             show_guess(guess, word);
@@ -51,6 +51,16 @@ def show_guess(guess, word): #
 
     # letters not included in word.
     wrong_letters = set(guess) - set(word);
+
+    """Show the user's guess on the terminal and classify all letters.
+
+    ## Example:
+
+    >>> show_guess("CRANE", "SNAKE")
+    Correct letters: A, E
+    Misplaced letters: N
+    Wrong letters: C, R
+    """
 
     print("Correct letters: ",", ".join(sorted(correct_letters)));
     print("Misplaced letters: ",", ".join(sorted(misplaced_letters)));
