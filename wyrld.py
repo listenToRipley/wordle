@@ -4,8 +4,10 @@ from string import ascii_letters
 
 def main():
     # find the current word.
-    word = get_random_word(...);
+    words_path = pathlib.Path(__file__).parent / "wordlist.txt"; #location of file where words are stored.
+    word = get_random_word(words_path); #param is the list of words you want to pick from
 
+    # where are start guessing
     for guess_num in range(1,7):
         guess = input(f"\nGuess {guess_num}: ").upper();
 
@@ -14,19 +16,18 @@ def main():
         if guess == word:
             break;
     
+    # end game
     else:
         game_over(...);
 
-# WORDLIST = pathlib.Path("wordlist.txt") #get word from txt doc.
-# words = [
-#     word.upper() # make sure the word provided is all upper.
-#     for word in WORDLIST.read_text(encoding="utf-8").strip().split("\n") # create an array to go through
-#     if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
-# ]
+def get_random_word(word_list):
+    words = [
+        word.upper()
+        for word in word_list # create an array to go through
+        if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
+    ];
 
-# word = random.choice(words)
-
-# WORD= "SNAKE"
+    return random.choice(words);
 
 # for guess_num in range(1,7):
 #     guess = input(f"\nGuess a word : ").upper() # verify that the guess will match the all upper current word
