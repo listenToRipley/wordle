@@ -2,8 +2,9 @@ import pathlib;
 import random;
 from string import ascii_letters;
 from rich.console import Console;
+from rich.theme import Theme;
 
-console = Console();
+console = Console(width=40); 
 
 def main():
     # find the current word.
