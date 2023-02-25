@@ -4,7 +4,7 @@ from string import ascii_letters;
 from rich.console import Console;
 from rich.theme import Theme;
 
-console = Console(width=40); 
+console = Console(width=40, theme=Theme({"warning": "red on yellow"})); 
 
 def main():
     # find the current word.
@@ -77,6 +77,8 @@ def refresh_page(headline):
     console.clear(); 
     # rule added decorative line
     console.rule(f"[bold blue]:leafy_green: {headline} :leafy_green:[/]\n")
+
+refresh_page("Wyrdl")
 
 if __name__ == "__main__":
     main(); # run main

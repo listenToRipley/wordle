@@ -11,6 +11,7 @@ from rich.console import Console;
 from rich.theme import Theme; # provides option to give additional pretext to content
 
 console = Console(width=40, theme=Theme({"warning": "red on yellow"})); # if you don't specify the width, it will use the whole width of the terminal
+#theme is kind of line adding styling inline.
 
 console.print("Hello, [bold red]Rich[/] :wrapped_gift:");
 # rule added decorative line
