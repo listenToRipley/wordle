@@ -15,14 +15,20 @@ def main():
     # where are start guessing - main loop
     for idx in range(6):
         refresh_page(headline=f"Guess {idx + 1}"); #provide header
-        show_guess(guesses, word); # create table to display
+        show_guesses(guesses, word); # create table to display
         
-        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper()
+        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
 
         #short circuit
         if guesses[idx] == word: 
             break; 
-    
+        
+        # validate guess
+        if len(guesses[idx]) != 5 and (letter not in ascii_letters for letter in guesses[idx]):
+            console.print('[bold red]Sorry, all guesses must be 5 letters long or be part of the english alphabet. Please try again.[/]');
+            guesses.pop();
+            guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
+
         # end game
         game_over(guesses, word);
 
@@ -41,41 +47,25 @@ def get_random_word(word_list):
     return random.choice(words);
 
 
-def show_guess(guesses, word): 
+def show_guesses(guesses, word):
     for guess in guesses:
         styled_guess = []
-
-        if len(guess) != 5:
-            bad_guess(guesses, "len");
-
         for letter, correct in zip(guess, word):
-
-            if letter not in ascii_letters and letter != '_':
-                bad_guess(guesses, None);
-            
             if letter == correct:
-                style = "bold white on green";
+                style = "bold white on green"
             elif letter in word:
-                style = "bold white on yellow";
+                style = "bold white on yellow"
             elif letter in ascii_letters:
                 style = "white on #666666"
             else:
                 style = "dim"
             styled_guess.append(f"[{style}]{letter}[/]")
-    
-    console.print("".join(styled_guess), justify="center")
 
-def bad_guess(guesses, error):
-    # TODO: Not added, but need to move one guess back. 
-    if error == "len":
-        console.print('[bold red]Sorry, all guesses must be 5 letters long. Please try again.[/]')
-    else:
-        console.print('[bold red]Sorry, all letter must be from the english alphabet. Please try again[/]')
-    guesses.pop(); #remove the last items from the guess list. 
+        console.print("".join(styled_guess), justify="center")
 
 def game_over(guesses, word):
     refresh_page(headline="Game Over");
-    show_guess(guesses, word); 
+    show_guesses(guesses, word); 
 
 
 if __name__ == "__main__":
