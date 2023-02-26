@@ -6,14 +6,20 @@ from rich.theme import Theme;
 
 console = Console(width=40, theme=Theme({"warning": "red on yellow"})); 
 
+# for easy update
+NUM_LETTERS = 5
+NUM_GUESSES = 6
+WORDS_PATH = pathlib.Path(__file__).parent / "wordlist.txt"
+
 def main():
     # find the current word.
-    words_path = pathlib.Path(__file__).parent / "wordlist.txt"; #location of file where words are stored.
-    word = get_random_word(words_path.read_text(encoding="utf-8").split("\n")); #param is the list of words you want to pick from
-    guesses = ["_" * 5] * 6;
+    word = get_random_word(WORDS_PATH.read_text(encoding="utf-8").split("\n"));
+
+    # create board
+    guesses = ["_" * NUM_LETTERS] * NUM_GUESSES
 
     # where are start guessing - main loop
-    for idx in range(6):
+    for idx in range(NUM_GUESSES):
         refresh_page(headline=f"Guess {idx + 1}"); #provide header
         show_guesses(guesses, word); # create table to display
         
@@ -35,11 +41,11 @@ def get_random_word(word_list):
     if words := [
         word.upper()
         for word in word_list # create an array to go through
-        if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
+        if len(word) == NUM_LETTERS and all(letter in ascii_letters for letter in word) # validate letters will be readable
     ]:
         return random.choice(words);
     else:
-        console.print("No words of length 5 in the word list", style="warning");
+        console.print(f"No words of length {NUM_LETTERS} in the word list", style="warning");
         raise SystemExit();
 
 
@@ -68,7 +74,7 @@ def guess_word(previous_guesses):
         console.print(f"You've already guessed {guess}.", style="warning");
         return guess_word(previous_guesses);
 
-    if len(guess) != 5:
+    if len(guess) != NUM_LETTERS:
         console.print("Your guess must be 5 letters.", style="warning");
         return guess_word(previous_guesses)
 
