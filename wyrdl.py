@@ -24,19 +24,19 @@ def main():
             elif len(guesses[idx]) == 5:
                 bad_guess = False; #needs reset
         
-        if bad_guess:
-            console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
-            # TODO: test that bad guesses do not get added to the list.
-            guesses.pop(); #remove the last items from the guess list. 
-
-        else: 
-            show_guess(guesses[idx], word);
-            if guesses[idx] == word: #validate if these are correct.
-                break; #only exit if they guess correctly.
+            if bad_guess:
+                console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
+                # TODO: test that bad guesses do not get added to the list.
+                guesses.pop(); #remove the last items from the guess list. 
     
-    # end game
-    else:
-        game_over(word);
+            else: 
+                show_guess(guesses[idx], word);
+                if guesses[idx] == word: #validate if these are correct.
+                    break; #only exit if they guess correctly.
+    
+        # end game
+        else:
+            game_over(word);
 
 def refresh_page(headline):
     console.clear(); 
@@ -52,37 +52,25 @@ def get_random_word(word_list):
 
     return random.choice(words);
 
-def show_guess(guess, word): #
-    #3 types of options for letters provided in guess
-    # verify letter is valid amd in correct location
-    correct_letters = { 
-        letter for letter, correct in zip(guess, word) if letter == correct
-    } # ZIP: element-by-element comparisons between elements, in our case, the guess and the word.
+def show_guess(guesses, word): #
+    for guess in guess:
+        styled_guess = []
+        for letter, correct in zip(guess, word):
+            if letter == correct:
+                style = "bold white on green";
+            elif letter in word:
+                style = "bold white on yellow";
+            elif letter in ascii_letters:
+                style = "white on #666666"
+            else:
+                style = "dim"
+            styled_guess.append(f"[{style}]{letter}[/]")
+    
+    console.print("".join(styled_guess), justify="center")
 
-    # correct letters, wrong location
-    misplaced_letters = set(guess) & set(word) - correct_letters; # remove the already accounted for letter
-
-    # set() and set() provide intersecting elements
-
-    # letters not included in word.
-    wrong_letters = set(guess) - set(word);
-
-    """Show the user's guess on the terminal and classify all letters.
-
-    ## Example:
-
-    >>> show_guess("CRANE", "SNAKE")
-    Correct letters: A, E
-    Misplaced letters: N
-    Wrong letters: C, R
-    """
-
-    print("Correct letters: ",", ".join(sorted(correct_letters)));
-    print("Misplaced letters: ",", ".join(sorted(misplaced_letters)));
-    print("Wrong letters: ",", ".join(sorted(wrong_letters)));
-
-def game_over(word):
-    print(f"The word was {word}");
+    def game_over(word):
+        refresh_page(headline="Game Over");
+        show_guess(guesses, word); 
 
 
 if __name__ == "__main__":
