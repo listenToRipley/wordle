@@ -10,25 +10,28 @@ def main():
     # find the current word.
     words_path = pathlib.Path(__file__).parent / "wordlist.txt"; #location of file where words are stored.
     word = get_random_word(words_path.read_text(encoding="utf-8").split("\n")); #param is the list of words you want to pick from
-    
+    guesses = ["_" * 5] * 6;
+
     bad_guess = False;
 
     # where are start guessing - main loop
-    for guess_num in range(1,7):
-        guess = input(f"\nGuess {guess_num}: ").upper(); # verify that the guess will match the all upper current word
+    for idx in range(6):
+        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper(); # verify that the guess will match the all upper current word
 
-        if all(letter in ascii_letters for letter in guess):
-            if len(guess) != 5:
+        if all(letter in ascii_letters for letter in guesses[idx]):
+            if len(guesses[idx]) != 5:
                 bad_guess = True;
-            elif len(guess) == 5:
+            elif len(guesses[idx]) == 5:
                 bad_guess = False; #needs reset
         
         if bad_guess:
             print('Sorry, all guesses must be 5 letters long. Please try again.')
+            # TODO: test that bad guesses do not get added to the list.
+            guesses.pop(); #remove the last items from the guess list. 
 
         else: 
-            show_guess(guess, word);
-            if guess == word: #validate if these are correct.
+            show_guess(guesses[idx], word);
+            if guesses[idx] == word: #validate if these are correct.
                 break; #only exit if they guess correctly.
     
     # end game
