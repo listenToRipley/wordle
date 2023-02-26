@@ -12,31 +12,19 @@ def main():
     word = get_random_word(words_path.read_text(encoding="utf-8").split("\n")); #param is the list of words you want to pick from
     guesses = ["_" * 5] * 6;
 
-    bad_guess = False;
-
     # where are start guessing - main loop
     for idx in range(6):
-        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper(); # verify that the guess will match the all upper current word
-
-        if all(letter in ascii_letters for letter in guesses[idx]):
-            if len(guesses[idx]) != 5:
-                bad_guess = True;
-            elif len(guesses[idx]) == 5:
-                bad_guess = False; #needs reset
+        refresh_page(headline=f"Guess {idx + 1}"); #provide header
+        show_guess(guesses, word); # create table to display
         
-            if bad_guess:
-                console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
-                # TODO: test that bad guesses do not get added to the list.
-                guesses.pop(); #remove the last items from the guess list. 
-    
-            else: 
-                show_guess(guesses[idx], word);
-                if guesses[idx] == word: #validate if these are correct.
-                    break; #only exit if they guess correctly.
+        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper()
+
+        #short circuit
+        if guesses[idx] == word: 
+            break; 
     
         # end game
-        else:
-            game_over(word);
+        game_over(guesses, word);
 
 def refresh_page(headline):
     console.clear(); 
@@ -52,10 +40,19 @@ def get_random_word(word_list):
 
     return random.choice(words);
 
-def show_guess(guesses, word): #
-    for guess in guess:
+
+def show_guess(guesses, word): 
+    for guess in guesses:
         styled_guess = []
+
+        if len(guess) != 5:
+            bad_guess(guesses, "len");
+
         for letter, correct in zip(guess, word):
+
+            if letter not in ascii_letters:
+                bad_guess(guesses, None);
+            
             if letter == correct:
                 style = "bold white on green";
             elif letter in word:
@@ -68,9 +65,17 @@ def show_guess(guesses, word): #
     
     console.print("".join(styled_guess), justify="center")
 
-    def game_over(word):
-        refresh_page(headline="Game Over");
-        show_guess(guesses, word); 
+def bad_guess(guesses, error):
+    # TODO: test that bad guesses do not get added to the list.
+    if error == "len":
+        console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
+    else: 
+        console.print('Sorry, all letter must be from the english alphabet. Please try again', style="bad")
+    guesses.pop(); #remove the last items from the guess list. 
+
+def game_over(guesses, word):
+    refresh_page(headline="Game Over");
+    show_guess(guesses, word); 
 
 
 if __name__ == "__main__":
