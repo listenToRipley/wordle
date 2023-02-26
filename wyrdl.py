@@ -1,6 +1,6 @@
 import pathlib;
 import random;
-from string import ascii_letters;
+from string import ascii_letters, ascii_uppercase;
 from rich.console import Console;
 from rich.theme import Theme;
 
@@ -50,8 +50,12 @@ def get_random_word(word_list):
 
 
 def show_guesses(guesses, word):
+        
+    letter_status = {letter: letter for letter in ascii_uppercase}; #dictionary letter check
+    
     for guess in guesses:
         styled_guess = []
+
         for letter, correct in zip(guess, word):
             if letter == correct:
                 style = "bold white on green";
@@ -62,8 +66,13 @@ def show_guesses(guesses, word):
             else:
                 style = "dim"
             styled_guess.append(f"[{style}]{letter}[/]");
+        
+            if letter != "_":
+                letter_status[letter] = f"[{style}]{letter}[/]"
 
         console.print("".join(styled_guess), justify="center");
+
+    console.print("\n" + "".join(letter_status.values()), justify="center"); #show tracker
 
 # error handling
 def guess_word(previous_guesses):
