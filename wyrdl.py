@@ -18,10 +18,6 @@ def main():
         show_guesses(guesses, word); # create table to display
         
         guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
-
-        #short circuit
-        if guesses[idx] == word: 
-            break; 
         
         # validate guess
         if len(guesses[idx]) != 5 and (letter not in ascii_letters for letter in guesses[idx]):
@@ -30,12 +26,12 @@ def main():
             guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
 
         # end game
-        game_over(guesses, word);
+        game_over(guesses, word, guessed_correctly=guesses[idx] == word);
 
 def refresh_page(headline):
     console.clear(); 
     # rule added decorative line
-    console.rule(f"[bold blue]:leafy_green: {headline} :leafy_green:[/]\n");
+    console.rule(f"[bold blue]:glowing_star: {headline} :glowing_star:[/]\n");
 
 def get_random_word(word_list):
     words = [
@@ -63,9 +59,14 @@ def show_guesses(guesses, word):
 
         console.print("".join(styled_guess), justify="center")
 
-def game_over(guesses, word):
+def game_over(guesses, word, guessed_correctly):
     refresh_page(headline="Game Over");
     show_guesses(guesses, word); 
+
+    if guessed_correctly:
+        console.print(f"\n[bold white on green]Correct, the word is {word}[/]")
+    else:
+        console.print(f"\n[bold white on red]Sorry, the word was {word}[/]")
 
 
 if __name__ == "__main__":
