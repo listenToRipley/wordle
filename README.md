@@ -40,6 +40,10 @@ Placeholder for scoring.
 
 6. Improve the user interface by adding the status of all the letters in the alphabet.
 
+## Exit 
+
+`Ctrl + C`
+
 ## Dependencies
 
 The project uses [Rich](https://rich.readthedocs.io/) for style, color, and formatting in the terminal. You should first create a virtual environment:
@@ -83,8 +87,6 @@ Distributed under the MIT license. See [`LICENSE`](../LICENSE) for more informat
 
 ## Notes
 
-*Stopped at step 4*
-
 ### Testing
 
 Used [Alice in Wonderland text](gutenberg.org/cache/epub/11/pg11-images.html)
@@ -106,3 +108,7 @@ With the [create_wordlist](./create_wordlist.py) you should replace  the followi
 ```
 
 Also import `re`
+
+This application uses [Rich](https://rich.readthedocs.io/en/latest/) to provide an interface.
+
+*Go over next steps before completed*

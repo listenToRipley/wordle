@@ -1,73 +1,112 @@
-import pathlib
-import random
-from string import ascii_letters
+import contextlib;
+import pathlib;
+import random;
+from string import ascii_letters, ascii_uppercase;
+from rich.console import Console;
+from rich.theme import Theme;
+
+console = Console(width=40, theme=Theme({"warning": "red on yellow"})); 
+
+# for easy update
+NUM_LETTERS = 5
+NUM_GUESSES = 6
+WORDS_PATH = pathlib.Path(__file__).parent / "wordlist.txt"
 
 def main():
     # find the current word.
-    words_path = pathlib.Path(__file__).parent / "wordlist.txt"; #location of file where words are stored.
-    word = get_random_word(words_path.read_text(encoding="utf-8").split("\n")); #param is the list of words you want to pick from
-    
-    bad_guess = False;
+    word = get_random_word(WORDS_PATH.read_text(encoding="utf-8").split("\n"));
 
-    # where are start guessing - main loop
-    for guess_num in range(1,7):
-        guess = input(f"\nGuess {guess_num}: ").upper(); # verify that the guess will match the all upper current word
+    # create board
+    guesses = ["_" * NUM_LETTERS] * NUM_GUESSES
 
-        if len(guess) != 5 and all(letter in ascii_letters for letter in guess):
-            bad_guess = True;
-        
-        if bad_guess:
-            print('Sorry, all guesses must be 5 letters long. Please try again.')
+    with contextlib.suppress(KeyboardInterrupt): #allows to easy restart 
+        # where are start guessing - main loop
+        for idx in range(NUM_GUESSES):
+            refresh_page(headline=f"Guess {idx + 1}"); #provide header
+            show_guesses(guesses, word); # create table to display
 
-        else: 
-            show_guess(guess, word);
-            if guess == word: #validate if these are correct.
-                break; #only exit if they guess correctly.
-    
-    # end game
-    else:
-        game_over(word);
+            guesses[idx] = guess_word(previous_guesses=guesses[:idx]); #pass as reference
+
+            #short circuit
+            if guesses[idx] == word:
+                break;
+
+            # end game
+            game_over(guesses, word, guessed_correctly=guesses[idx] == word);
+
+def refresh_page(headline):
+    console.clear(); 
+    # rule added decorative line
+    console.rule(f"[bold blue]:glowing_star: {headline} :glowing_star:[/]\n");
 
 def get_random_word(word_list):
-    words = [
+    if words := [
         word.upper()
         for word in word_list # create an array to go through
-        if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
-    ];
+        if len(word) == NUM_LETTERS and all(letter in ascii_letters for letter in word) # validate letters will be readable
+    ]:
+        return random.choice(words);
+    else:
+        console.print(f"No words of length {NUM_LETTERS} in the word list", style="warning");
+        raise SystemExit();
 
-    return random.choice(words);
 
-def show_guess(guess, word): #
-    #3 types of options for letters provided in guess
-    # verify letter is valid amd in correct location
-    correct_letters = { 
-        letter for letter, correct in zip(guess, word) if letter == correct
-    } # ZIP: element-by-element comparisons between elements, in our case, the guess and the word.
+def show_guesses(guesses, word):
+        
+    letter_status = {letter: letter for letter in ascii_uppercase}; #dictionary letter check
+    
+    for guess in guesses:
+        styled_guess = []
 
-    # correct letters, wrong location
-    misplaced_letters = set(guess) & set(word) - correct_letters; # remove the already accounted for letter
+        for letter, correct in zip(guess, word):
+            if letter == correct:
+                style = "bold white on green";
+            elif letter in word:
+                style = "bold white on yellow";
+            elif letter in ascii_letters:
+                style = "white on #666666";
+            else:
+                style = "dim"
+            styled_guess.append(f"[{style}]{letter}[/]");
+        
+            if letter != "_":
+                letter_status[letter] = f"[{style}]{letter}[/]"
 
-    # set() and set() provide intersecting elements
+        console.print("".join(styled_guess), justify="center");
 
-    # letters not included in word.
-    wrong_letters = set(guess) - set(word);
+    console.print("\n" + "".join(letter_status.values()), justify="center"); #show tracker
 
-    """Show the user's guess on the terminal and classify all letters.
+# error handling
+def guess_word(previous_guesses):
 
-    ## Example:
+    guess = console.input("\nGuess word: ").upper();
 
-    >>> show_guess("CRANE", "SNAKE")
-    Correct letters: A, E
-    Misplaced letters: N
-    Wrong letters: C, R
-    """
+    if guess in previous_guesses:
+        console.print(f"You've already guessed {guess}.", style="warning");
+        return guess_word(previous_guesses);
 
-    print("Correct letters: ",", ".join(sorted(correct_letters)));
-    print("Misplaced letters: ",", ".join(sorted(misplaced_letters)));
-    print("Wrong letters: ",", ".join(sorted(wrong_letters)));
+    if len(guess) != NUM_LETTERS:
+        console.print("Your guess must be 5 letters.", style="warning");
+        return guess_word(previous_guesses)
 
-def game_over(word):
-    print(f"The word was {word}");
+    if any((invalid := letter) not in ascii_letters for letter in guess):
+        console.print(
+            f"Invalid letter: '{invalid}'. Please use English letters.",
+            style="warning",
+        );
+        return guess_word(previous_guesses);
+
+    return guess;
+
+def game_over(guesses, word, guessed_correctly):
+    refresh_page(headline="Game Over");
+    show_guesses(guesses, word); 
+
+    if guessed_correctly:
+        console.print(f"\n[bold white on green]Correct, the word is {word}[/]")
+    else:
+        console.print(f"\n[bold white on red]Sorry, the word was {word}[/]")
+
 
 if __name__ == "__main__":
     main(); # run main
