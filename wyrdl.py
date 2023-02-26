@@ -35,6 +35,11 @@ def main():
     else:
         game_over(word);
 
+def refresh_page(headline):
+    console.clear(); 
+    # rule added decorative line
+    console.rule(f"[bold blue]:leafy_green: {headline} :leafy_green:[/]\n");
+
 def get_random_word(word_list):
     words = [
         word.upper()
@@ -76,12 +81,6 @@ def show_guess(guess, word): #
 def game_over(word):
     print(f"The word was {word}");
 
-def refresh_page(headline):
-    console.clear(); 
-    # rule added decorative line
-    console.rule(f"[bold blue]:leafy_green: {headline} :leafy_green:[/]\n")
-
-refresh_page("Wyrdl")
 
 if __name__ == "__main__":
     main(); # run main
