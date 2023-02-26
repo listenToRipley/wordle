@@ -4,7 +4,7 @@ from string import ascii_letters;
 from rich.console import Console;
 from rich.theme import Theme;
 
-console = Console(width=40, theme=Theme({"warning": "red on yellow"}, {"bad": "bold red"})); 
+console = Console(width=40, theme=Theme({"warning": "red on yellow"})); 
 
 def main():
     # find the current word.
@@ -50,7 +50,7 @@ def show_guess(guesses, word):
 
         for letter, correct in zip(guess, word):
 
-            if letter not in ascii_letters:
+            if letter not in ascii_letters and letter != '_':
                 bad_guess(guesses, None);
             
             if letter == correct:
@@ -66,11 +66,11 @@ def show_guess(guesses, word):
     console.print("".join(styled_guess), justify="center")
 
 def bad_guess(guesses, error):
-    # TODO: test that bad guesses do not get added to the list.
+    # TODO: Not added, but need to move one guess back. 
     if error == "len":
-        console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
-    else: 
-        console.print('Sorry, all letter must be from the english alphabet. Please try again', style="bad")
+        console.print('[bold red]Sorry, all guesses must be 5 letters long. Please try again.[/]')
+    else:
+        console.print('[bold red]Sorry, all letter must be from the english alphabet. Please try again[/]')
     guesses.pop(); #remove the last items from the guess list. 
 
 def game_over(guesses, word):
