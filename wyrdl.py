@@ -17,13 +17,11 @@ def main():
         refresh_page(headline=f"Guess {idx + 1}"); #provide header
         show_guesses(guesses, word); # create table to display
         
-        guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
-        
-        # validate guess
-        if len(guesses[idx]) != 5 and (letter not in ascii_letters for letter in guesses[idx]):
-            console.print('[bold red]Sorry, all guesses must be 5 letters long or be part of the english alphabet. Please try again.[/]');
-            guesses.pop();
-            guesses[idx] = input(f"\nGuess {idx + 1}: ").upper();
+        guesses[idx] = guess_word(previous_guesses=guesses[:idx]); #pass as reference
+
+        #short circuit
+        if guesses[idx] == word:
+            break;
 
         # end game
         game_over(guesses, word, guessed_correctly=guesses[idx] == word);
@@ -34,13 +32,15 @@ def refresh_page(headline):
     console.rule(f"[bold blue]:glowing_star: {headline} :glowing_star:[/]\n");
 
 def get_random_word(word_list):
-    words = [
+    if words := [
         word.upper()
         for word in word_list # create an array to go through
         if len(word) == 5 and all(letter in ascii_letters for letter in word) # validate letters will be readable
-    ];
-
-    return random.choice(words);
+    ]:
+        return random.choice(words);
+    else:
+        console.print("No words of length 5 in the word list", style="warning");
+        raise SystemExit();
 
 
 def show_guesses(guesses, word):
@@ -48,16 +48,38 @@ def show_guesses(guesses, word):
         styled_guess = []
         for letter, correct in zip(guess, word):
             if letter == correct:
-                style = "bold white on green"
+                style = "bold white on green";
             elif letter in word:
-                style = "bold white on yellow"
+                style = "bold white on yellow";
             elif letter in ascii_letters:
-                style = "white on #666666"
+                style = "white on #666666";
             else:
                 style = "dim"
-            styled_guess.append(f"[{style}]{letter}[/]")
+            styled_guess.append(f"[{style}]{letter}[/]");
 
-        console.print("".join(styled_guess), justify="center")
+        console.print("".join(styled_guess), justify="center");
+
+# error handling
+def guess_word(previous_guesses):
+
+    guess = console.input("\nGuess word: ").upper();
+
+    if guess in previous_guesses:
+        console.print(f"You've already guessed {guess}.", style="warning");
+        return guess_word(previous_guesses);
+
+    if len(guess) != 5:
+        console.print("Your guess must be 5 letters.", style="warning");
+        return guess_word(previous_guesses)
+
+    if any((invalid := letter) not in ascii_letters for letter in guess):
+        console.print(
+            f"Invalid letter: '{invalid}'. Please use English letters.",
+            style="warning",
+        );
+        return guess_word(previous_guesses);
+
+    return guess;
 
 def game_over(guesses, word, guessed_correctly):
     refresh_page(headline="Game Over");
