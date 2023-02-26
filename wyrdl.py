@@ -4,7 +4,7 @@ from string import ascii_letters;
 from rich.console import Console;
 from rich.theme import Theme;
 
-console = Console(width=40, theme=Theme({"warning": "red on yellow"})); 
+console = Console(width=40, theme=Theme({"warning": "red on yellow"}, {"bad": "bold red"})); 
 
 def main():
     # find the current word.
@@ -25,7 +25,7 @@ def main():
                 bad_guess = False; #needs reset
         
         if bad_guess:
-            print('Sorry, all guesses must be 5 letters long. Please try again.')
+            console.print('Sorry, all guesses must be 5 letters long. Please try again.', style = "bad")
             # TODO: test that bad guesses do not get added to the list.
             guesses.pop(); #remove the last items from the guess list. 
 
